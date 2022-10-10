@@ -1,5 +1,30 @@
+@mixin mobile {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+@mixin laptop {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
+/* COLOR TEMPLATE */
+$colorAlpha: #2f2d52;
+$colorBeta: #5d5b8d;
+$colorGamma: #3e3c61;
+$colorDelta: #7b96ec;
+$colorEta: #8da4f1;
+$colorEpsilon: #a7bcff;
+$colorZeta: #ddddf7;
+
 .formContainer {
-  background-color: #a7bcff;
+  background-color: $colorEpsilon;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -15,13 +40,13 @@
     align-items: center;
 
     .logo {
-      color: #5d5b8d;
+      color: $colorBeta;
       font-weight: bold;
       font-size: 24px;
     }
 
     .title {
-      color: #5d5b8d;
+      color: $colorBeta;
       font-size: 12px;
     }
 
@@ -34,14 +59,14 @@
         width: 250px;
         padding: 15px;
         border: none;
-        border-bottom: 1px solid #a7bcff;
+        border-bottom: 1px solid $colorEpsilon;
         &::placeholder {
           color: rgb(175, 175, 175);
         }
       }
 
       button {
-        background-color: #7b96ec;
+        background-color: $colorDelta;
         color: white;
         padding: 10px;
         font-weight: bold;
@@ -53,7 +78,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        color: #8da4f1;
+        color: $colorEta;
         font-style: 12px;
         cursor: pointer;
 
@@ -64,7 +89,7 @@
     }
 
     p {
-      color: #5d5b8d;
+      color: $colorBeta;
       font-style: 12px;
       margin-top: 10px;
     }
@@ -72,7 +97,7 @@
 }
 
 .home {
-  background-color: #a7bcff;
+  background-color: $colorEpsilon;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -85,22 +110,31 @@
     height: 80%;
     display: flex;
     overflow: hidden;
+    @include tablet {
+      width: 90%;
+    }
 
     .sidebar {
       flex: 1;
-      background-color: #3e3c61;
+      background-color: $colorGamma;
+      @include tablet {
+        position: relative;
+      }
 
       .navbar {
         display: flex;
         align-items: center;
-        background-color: #2f2d52;
+        background-color: $colorAlpha;
         height: 50px;
         padding: 10px;
         justify-content: space-between;
-        color: #ddddf7;
+        color: $colorZeta;
 
         .logo {
           font-weight: bold;
+          @include tablet {
+            display: none;
+          }
         }
 
         .user {
@@ -108,7 +142,7 @@
           gap: 10px;
 
           img {
-            background-color: #ddddf7;
+            background-color: $colorZeta;
             height: 24px;
             width: 24px;
             border-radius: 50%;
@@ -116,11 +150,15 @@
           }
 
           button {
-            background-color: #5d5b8d;
-            color: #ddddf7;
+            background-color: $colorBeta;
+            color: $colorZeta;
             font-size: 10px;
             border: none;
             cursor: pointer;
+            @include tablet {
+              position: absolute;
+              bottom: 10px;
+            }
           }
         }
       }
@@ -153,7 +191,7 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #2f2d52;
+          background-color: $colorAlpha;
         }
 
         img {
@@ -180,7 +218,7 @@
 
       .chatInfo {
         height: 50px;
-        background-color: #5d5b8d;
+        background-color: $colorBeta;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -199,15 +237,23 @@
       }
 
       .messages {
-        background-color: #ddddf7;
+        background-color: $colorZeta;
         padding: 10px;
         height: calc(100% - 160px);
+        overflow: scroll;
 
         .message {
           display: flex;
           gap: 20px;
+          margin-bottom: 20px;
 
           .messageInfo {
+            display: flex;
+            flex-direction: column;
+            color: gray;
+            font-weight: 300;
+            margin-bottom: 20px;
+
             img {
               width: 40px;
               height: 40px;
@@ -217,8 +263,34 @@
           }
 
           .messageContent {
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            p {
+              background-color: white;
+              padding: 10px 20px;
+              border-radius: 0px 10px 10px 10px;
+              max-width: max-content;
+            }
+
             img {
               width: 50%;
+            }
+          }
+
+          &.owner {
+            flex-direction: row-reverse;
+
+            .messageContent {
+              align-items: flex-end;
+            }
+
+            p {
+              background-color: $colorEta;
+              color: white;
+              border-radius: 10px 0px 10px 10px;
             }
           }
         }
@@ -236,7 +308,7 @@
           width: 100%;
           border: none;
           outline: none;
-          color: #2f2d52;
+          color: $colorAlpha;
           font-size: 18px;
 
           &::placeholder {
@@ -258,7 +330,7 @@
             border: none;
             padding: 10px 15px;
             color: white;
-            background-color: #8da4f1;
+            background-color: $colorEta;
           }
         }
       }
