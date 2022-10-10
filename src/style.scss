@@ -240,7 +240,13 @@ $colorZeta: #ddddf7;
         background-color: $colorZeta;
         padding: 10px;
         height: calc(100% - 160px);
-        overflow: scroll;
+        overflow-y: scroll;
+        /* Scrollbar disabled */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+          display: none;
+        }
 
         .message {
           display: flex;
