@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Add from '../img/addAvatar.png';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth, db, storage } from '../config/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
 
 interface FormElements extends HTMLFormControlsCollection {
   displayNameInput: HTMLInputElement;
@@ -20,10 +22,32 @@ const Register = () => {
     const displayName = e.currentTarget.elements.displayNameInput.value;
     const email = e.currentTarget.elements.emailInput.value;
     const password = e.currentTarget.elements.passwordInput.value;
-    const file = e.currentTarget.elements.fileInput.value;
+    const file = e.currentTarget.elements.fileInput.files![0];
+
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
+
+      const date = new Date().getTime();
+      const storageRef = ref(storage, `${displayName + date}`);
+
+      await uploadBytesResumable(storageRef, file).then(() => {
+        getDownloadURL(storageRef).then(async (downloadURL) => {
+          await updateProfile(res.user, {
+            displayName,
+            photoURL: downloadURL,
+          });
+
+          await setDoc(doc(db, 'users', res.user.uid), {
+            uid: res.user.uid,
+            displayName,
+            email,
+            photoURL: downloadURL,
+          });
+        });
+      });
     } catch (error) {
+      console.log(error);
+
       setErr(true);
     }
   };
@@ -34,11 +58,26 @@ const Register = () => {
         <span className='logo'>Beta Chat</span>
         <span className='title'>Register</span>
         <form onSubmit={handleSubmit}>
-          <input type='text' placeholder='display name' id='displayNameInput' />
-          <input type='email' placeholder='email' id='emailInput' />
-          <input type='password' placeholder='password' id='passwordInput' />
-          <input type='file' style={{ display: 'none' }} id='fileInput' />
-          <label htmlFor='file'>
+          <input
+            required
+            type='text'
+            placeholder='display name'
+            id='displayNameInput'
+          />
+          <input required type='email' placeholder='email' id='emailInput' />
+          <input
+            required
+            type='password'
+            placeholder='password'
+            id='passwordInput'
+          />
+          <input
+            required
+            type='file'
+            style={{ display: 'none' }}
+            id='fileInput'
+          />
+          <label htmlFor='fileInput'>
             <img src={Add} alt='' />
             <span>Add an avatar</span>
           </label>
