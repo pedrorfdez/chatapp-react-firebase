@@ -13,7 +13,6 @@ const Login = () => {
         </form>
         <p>You don't have an account? Register</p>
       </div>
-      ;
     </div>
   );
 };
