@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../config/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 interface FormElements extends HTMLFormControlsCollection {
   displayNameInput: HTMLInputElement;
@@ -17,6 +18,8 @@ interface RegisterFormElement extends HTMLFormElement {
 
 const Register = () => {
   const [err, setErr] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent<RegisterFormElement>) => {
     e.preventDefault();
     const displayName = e.currentTarget.elements.displayNameInput.value;
@@ -43,6 +46,9 @@ const Register = () => {
             email,
             photoURL: downloadURL,
           });
+
+          await setDoc(doc(db, 'userChats', res.user.uid), {});
+          navigate('/');
         });
       });
     } catch (error) {
