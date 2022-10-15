@@ -52,8 +52,6 @@ const Register = () => {
         });
       });
     } catch (error) {
-      console.log(error);
-
       setErr(true);
     }
   };

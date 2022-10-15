@@ -16,7 +16,6 @@ function App() {
     return <>{children}</>;
   };
 
-  console.log(currentUser);
   return (
     <BrowserRouter>
       <Routes>
